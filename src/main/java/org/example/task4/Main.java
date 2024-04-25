@@ -12,8 +12,8 @@ public class Main {
 
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Main.class);
-//        System.out.println(Arrays.asList(context.getBeanDefinitionNames()));
-        UserService userService = (UserService) context.getBean(UserService.class);
+        System.out.println(Arrays.asList(context.getBeanDefinitionNames()));
+        UserService userService = context.getBean(UserService.class);
 
         System.out.println("------Part1: addUser--------" );
         userService.addUser("Alex8");
@@ -22,9 +22,10 @@ public class Main {
 
         System.out.println("------Part2: getAll--------" );
         List<User> users = userService.getAll();
-        for (User u: users) {
-            System.out.print(u.getId()+" "+u.getUsername()+"; ");
-        }
+        if(users != null)
+            for (User u: users) {
+                System.out.print(u.getId()+" "+u.getUsername()+"; ");
+            }
         System.out.println();
 
         System.out.println("------Part3: delete--------" );
@@ -40,9 +41,9 @@ public class Main {
 
         System.out.println("------Part5: getByUsername--------" );
         User user1 = userService.getByUsername("Alex8");
-        System.out.println(user1.getId()+" "+user1.getUsername());
+        if(user1 != null) System.out.println(user1.getId()+" "+user1.getUsername());
         User user2 = userService.getByUsername("Moly9");
-        System.out.println(user2.getId()+" "+user2.getUsername());
+        if(user2 != null) System.out.println(user2.getId()+" "+user2.getUsername());
 
 
 

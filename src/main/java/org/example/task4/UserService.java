@@ -11,18 +11,16 @@ import java.util.List;
 @Component
 public final  class  UserService implements UserRepository{
 
-
-    private HikariDataSource dataSource;
+    private final HikariDataSource dataSource;
 
     @Autowired
-    public void UserService(HikariDataSource dataSource) {
+    public UserService(HikariDataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     @Override
     public void addUser(String username) {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
+        PreparedStatement statement;
 
         try (Connection connection = dataSource.getConnection()) {
             statement = connection.prepareStatement("insert into users(username) values(?)");
@@ -31,14 +29,12 @@ public final  class  UserService implements UserRepository{
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-//            throw new RuntimeException(e);
         }
     }
 
     @Override
     public void delete(long id) {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
+        PreparedStatement statement;
 
         try (Connection connection = dataSource.getConnection()) {
             statement = connection.prepareStatement("delete from  users where id = ?");
@@ -47,29 +43,24 @@ public final  class  UserService implements UserRepository{
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-//            throw new RuntimeException(e);
         }
 
     }
 
     @Override
     public User getByUsername(String username) {
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
+        PreparedStatement statement;
+        ResultSet resultSet;
 
         try (Connection connection = dataSource.getConnection()) {
             statement = connection.prepareStatement("select id, username from users where username = ?");
             statement.setString(1, username);
             resultSet = statement.executeQuery();
 
-
-            while (resultSet.next()) {
-                return new User(resultSet.getLong(1), resultSet.getString(2));
-            }
+            if (resultSet.next()) return new User(resultSet.getLong(1), resultSet.getString(2));
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-//            throw new RuntimeException(e);
         }
         return null;
     }
@@ -77,8 +68,8 @@ public final  class  UserService implements UserRepository{
     @Override
     public List<User> getAll() {
         String sql = "select id, username from users";
-        Statement statement = null;
-        ResultSet resultSet = null;
+        Statement statement;
+        ResultSet resultSet;
         List<User> users = new ArrayList<>();
         try (Connection connection = dataSource.getConnection()) {
             statement = connection.createStatement();
@@ -90,7 +81,6 @@ public final  class  UserService implements UserRepository{
             return users;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-//            throw new RuntimeException(e);
         }
     return null;
     }
