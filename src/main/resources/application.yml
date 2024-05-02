@@ -1,0 +1,8 @@
+server:
+  servlet:
+    context-path: "/test"
+  port: 8181
+
+spring:
+  application:
+    name: products
